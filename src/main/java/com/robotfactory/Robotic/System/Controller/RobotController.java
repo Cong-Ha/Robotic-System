@@ -1,10 +1,9 @@
 package com.robotfactory.Robotic.System.Controller;
 
 import com.robotfactory.Robotic.System.Model.Speaker;
+import com.robotfactory.Robotic.System.NotificationSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 
 @RestController
@@ -12,6 +11,9 @@ public class RobotController {
 
     @Autowired
     private Speaker speaker;
+
+    @Autowired
+    private NotificationSender notificationSender;
 
     @GetMapping("/")
     public String home(){
@@ -23,8 +25,20 @@ public class RobotController {
         return speaker.sayHello();
     }
 
+    @GetMapping("/info")
+    public String info(){
+        return "Robot accesses the endpoint " + speaker.getEndPoint()
+                + " , with the maxRetryLimit=" + speaker.getRetryLimit();
+    }
+
     @PostMapping("/robot/command")
     public String executeCommand(@RequestBody String command) {
         return "Command Received: '" + command + "'. Robot will now execute the task!";
     }
+
+    @GetMapping("/notify")
+    public String notification(){
+        return notificationSender.send("operator@robotics.com", "Battery down..");
+    }
+
 }
