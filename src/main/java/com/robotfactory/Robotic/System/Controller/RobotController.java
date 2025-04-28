@@ -1,5 +1,6 @@
 package com.robotfactory.Robotic.System.Controller;
 
+import com.robotfactory.Robotic.System.Model.DecimalFormatterService;
 import com.robotfactory.Robotic.System.Model.Speaker;
 import com.robotfactory.Robotic.System.NotificationSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class RobotController {
 
     @Autowired
     private NotificationSender notificationSender;
+
+    @Autowired
+    private DecimalFormatterService decimalFormatterService;
 
     @GetMapping("/")
     public String home(){
@@ -41,4 +45,8 @@ public class RobotController {
         return notificationSender.send("operator@robotics.com", "Battery down..");
     }
 
+    @GetMapping("/format")
+    public String formatAmount(@RequestParam double amount){
+        return decimalFormatterService.format(amount);
+    }
 }
